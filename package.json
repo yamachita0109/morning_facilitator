@@ -1,0 +1,13 @@
+{
+  "name": "morning_facilitator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.642.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
+  }
+}
