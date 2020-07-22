@@ -11,7 +11,7 @@ let slackPostOption = {
     token: process.env.SLACK_TOKEN,
     channel: process.env.SLACK_CHANNEL,
     text: '',
-    username: 'WIP:ぼくのいうことはぜったい'
+    username: 'ぼくのいうことはぜったい'
   },
   json: true
 }
