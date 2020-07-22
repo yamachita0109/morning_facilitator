@@ -7,15 +7,15 @@ Resources:
       FunctionName: MorningFacilitatorFunction
       Handler: index.handler
       Runtime: nodejs12.x
-      Role: "{lambda arn}"
+      Role: {lambda arn}
       MemorySize: 128
       Timeout: 30
       Environment:
         Variables:
           TZ: Asia/Tokyo
-          MEMBER: "@yamada,@yamamoto,@yamashita,@yamagami,@yamsuda"
-          SLACK_TOKEN: "{slack api token}"
-          SLACK_CHANNEL: "{slack channel}"
+          MEMBER: '@yamada,@yamamoto,@yamashita,@yamagami,@yamsuda'
+          SLACK_TOKEN: {slack api token}
+          SLACK_CHANNEL: {slack channel}
 
   FacilitatorHistory:
     Type: AWS::DynamoDB::Table
@@ -32,19 +32,19 @@ Resources:
         WriteCapacityUnits: 3
 
   FacilitatorEventsRule:
-    Type: 'AWS::Events::Rule'
+    Type: AWS::Events::Rule
     Properties:
       Name: FacilitatorEventsRule
-      ScheduleExpression: 'cron(45 0 * * ? *)'
+      ScheduleExpression: cron(45 0 * * ? *)
       State: ENABLED
       Targets:
         - Arn: !GetAtt MorningFacilitatorFunction.Arn
           Id: lambda
           
   MorningFacilitatorPermission:
-    Type: 'AWS::Lambda::Permission'
+    Type: AWS::Lambda::Permission
     Properties:
-      Action: 'lambda:InvokeFunction'
+      Action: lambda:InvokeFunction
       FunctionName: !Ref MorningFacilitatorFunction
-      Principal: 'events.amazonaws.com'
+      Principal: events.amazonaws.com
       SourceArn: !GetAtt FacilitatorEventsRule.Arn
