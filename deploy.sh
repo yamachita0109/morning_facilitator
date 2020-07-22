@@ -1,9 +1,11 @@
 #!/bin/sh
 
+# ソースコードをアーカイブ
 rm -fr release && mkdir release
 zip -r app.zip index.js node_modules > /dev/null 2>&1
 mv app.zip release/
 
+# 必要な情報はベタがきするか、shの引数で対応
 AWS_IAM_USER_NAME=$1
 AWS_ACCESS_KEY_ID=$2
 AWS_SECRET_ACCESS_KEY=$3
