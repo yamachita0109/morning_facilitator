@@ -39,7 +39,7 @@ Resources:
     Properties:
       Name: FacilitatorEventsRule
       # 朝会開始時間5分前（GMTなのでJST変換すると+9時間）
-      ScheduleExpression: cron(55 0 * * ? *)
+      ScheduleExpression: cron(55 0 ? * 2-6 *)
       State: ENABLED
       Targets:
         - Arn: !GetAtt MorningFacilitatorFunction.Arn
