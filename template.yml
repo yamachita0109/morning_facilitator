@@ -1,25 +1,24 @@
-
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: 2010-09-09
 Resources:
   MorningFacilitatorFunction:
-    Type: "AWS::Lambda::Function"
+    Type: AWS::Lambda::Function
     Properties:
-      Code: "./release/app.zip"
-      FunctionName: "MorningFacilitatorFunction"
-      Handler: "index.handler"
-      Runtime: "nodejs12.x"
+      Code: ./release/app.zip
+      FunctionName: MorningFacilitatorFunction
+      Handler: index.handler
+      Runtime: nodejs12.x
       Role: "{lambda arn}"
       MemorySize: 128
       Timeout: 30
       Environment:
         Variables:
-          TZ: "Asia/Tokyo"
+          TZ: Asia/Tokyo
           MEMBER: "@yamada,@yamamoto,@yamashita,@yamagami,@yamsuda"
           SLACK_TOKEN: "{slack api token}"
           SLACK_CHANNEL: "{slack channel}"
 
   FacilitatorHistory:
-    Type: "AWS::DynamoDB::Table"
+    Type: AWS::DynamoDB::Table
     Properties:
       TableName: FacilitatorHistory
       AttributeDefinitions:
@@ -32,7 +31,7 @@ Resources:
         ReadCapacityUnits: 3
         WriteCapacityUnits: 3
 
-  Rule:
+  FacilitatorEventsRule:
     Type: 'AWS::Events::Rule'
     Properties:
       Name: FacilitatorEventsRule
@@ -42,11 +41,10 @@ Resources:
         - Arn: !GetAtt MorningFacilitatorFunction.Arn
           Id: lambda
           
-  LambdaEvent:
+  MorningFacilitatorPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MorningFacilitatorFunction
       Principal: 'events.amazonaws.com'
-      SourceArn: !GetAtt Rule.Arn
-
+      SourceArn: !GetAtt FacilitatorEventsRule.Arn
