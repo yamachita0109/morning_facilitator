@@ -7,13 +7,16 @@ Resources:
       FunctionName: MorningFacilitatorFunction
       Handler: index.handler
       Runtime: nodejs12.x
+      # Lambdaの実行ロール
       Role: {lambda arn}
       MemorySize: 128
       Timeout: 30
       Environment:
         Variables:
           TZ: Asia/Tokyo
+          # カンマ区切りでファシリテーター候補のSlackユーザーIDを定義
           MEMBER: '@yamada,@yamamoto,@yamashita,@yamagami,@yamsuda'
+          # 各種Slackの情報
           SLACK_TOKEN: {slack api token}
           SLACK_CHANNEL: {slack channel}
 
@@ -35,7 +38,8 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Name: FacilitatorEventsRule
-      ScheduleExpression: cron(45 0 * * ? *)
+      # 朝会開始時間5分前（GMTなのでJST変換すると+9時間）
+      ScheduleExpression: cron(55 0 * * ? *)
       State: ENABLED
       Targets:
         - Arn: !GetAtt MorningFacilitatorFunction.Arn
